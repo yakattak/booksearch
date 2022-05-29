@@ -1,3 +1,4 @@
+
 // import user model
 const { User } = require('../models');
 // import sign token function from auth

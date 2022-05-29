@@ -1,22 +1,32 @@
-const router = require('express').Router();
-const {
-  createUser,
-  getSingleUser,
-  saveBook,
-  deleteBook,
-  login,
-} = require('../../controllers/user-controller');
 
-// import middleware
-const { authMiddleware } = require('../../utils/auth');
+const { Schema } = require('mongoose');
 
-// put authMiddleware anywhere we need to send a token for verification of user
-router.route('/').post(createUser).put(authMiddleware, saveBook);
+// This is a subdocument schema, it won't become its own model but we'll use it as the schema for the User's `savedBooks` array in User.js
+const bookSchema = new Schema({
+  authors: [
+    {
+      type: String,
+    },
+  ],
+  description: {
+    type: String,
+    required: true,
+  },
+  // saved book id from GoogleBooks
+  bookId: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+  },
+  link: {
+    type: String,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+});
 
-router.route('/login').post(login);
-
-router.route('/me').get(authMiddleware, getSingleUser);
-
-router.route('/books/:bookId').delete(authMiddleware, deleteBook);
-
-module.exports = router;
+module.exports = bookSchema;
